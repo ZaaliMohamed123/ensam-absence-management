@@ -4,86 +4,116 @@ services:
   user-db:
     image: postgres:15-alpine
     container_name: user-db
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: user_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - user-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   academic-db:
     image: postgres:15-alpine
     container_name: academic-db
+    restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
       POSTGRES_DB: academic_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - academic-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d academic_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   absence-db:
     image: postgres:15-alpine
     container_name: absence-db
+    restart: unless-stopped
     ports:
       - "5434:5432"
     environment:
       POSTGRES_DB: absence_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - absence-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d absence_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   justification-db:
     image: postgres:15-alpine
     container_name: justification-db
+    restart: unless-stopped
     ports:
       - "5435:5432"
     environment:
       POSTGRES_DB: justification_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - justification-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d justification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   notification-db:
     image: postgres:15-alpine
     container_name: notification-db
+    restart: unless-stopped
     ports:
       - "5436:5432"
     environment:
       POSTGRES_DB: notification_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - notification-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   reporting-db:
     image: postgres:15-alpine
     container_name: reporting-db
+    restart: unless-stopped
     ports:
       - "5437:5432"
     environment:
       POSTGRES_DB: reporting_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - reporting-db-data:/var/lib/postgresql/data
-    networks:
-      - ensam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reporting_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   user-db-data:
@@ -92,7 +122,3 @@ volumes:
   justification-db-data:
   notification-db-data:
   reporting-db-data:
-
-networks:
-  ensam-network:
-    driver: bridge
